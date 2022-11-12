@@ -1,20 +1,39 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Blank
-    </ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
   <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+    <ion-button class="modeButton" fill="outline" shape="round" color="dark">
+      <ion-icon name="cafe-outline"></ion-icon> Short Break
+    </ion-button>
+    <div class="clock"><span>0900</span></div>
+    <div class="containerButtons">
+      <ion-button color="darkBlue">
+        <img src="../../assets/icon/sharp/white.svg" alt="sharps" />
+        <img
+          *ngIf="lightMode"
+          src="../../assets/icon/sharp/blue.svg"
+          alt="sharps"
+        />
+      </ion-button>
+      <ion-button color="blue" class="playButton">
+        <img
+          class="logoPlay"
+          src="../../assets/icon/playIcon/white.svg"
+          alt="play"
+        />
+        <img
+          *ngIf="lightMode"
+          class="logoPlay"
+          src="../../assets/icon/playIcon/blue.svg"
+          alt="play"
+        />
+      </ion-button>
+      <ion-button color="darkBlue">
+        <img src="../../assets/icon/fastForward/white.svg" alt="fastForward" />
+        <img
+          *ngIf="lightMode"
+          src="../../assets/icon/fastForward/blue.svg"
+          alt="fastForward"
+        />
+      </ion-button>
+    </div>
   </div>
 </ion-content>
