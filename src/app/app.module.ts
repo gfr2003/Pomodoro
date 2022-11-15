@@ -6,10 +6,12 @@ import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
+import { TimerDirectiveDirective } from './directives/timer-directive.directive';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, TimerDirectiveDirective],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule],
+  exports: [TimerDirectiveDirective],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent],
 })
