@@ -1,9 +1,17 @@
 <ion-content [fullscreen]="true">
   <div id="container">
-    <ion-button class="modeButton" fill="outline" shape="round" color="dark">
-      <ion-icon name="cafe-outline"></ion-icon> Short Break
-    </ion-button>
-    <div class="clock"><span>0900</span></div>
+    <ion-buttons>
+      <ion-button *ngIf="shortModeEnabled" class="modeButton" fill="outline" shape="round" color="dark" (click)="changeMode('long')">
+        <img src="../../assets/icon/coffee.svg" alt="Coffee"> Short Break
+      </ion-button>
+      <ion-button  *ngIf="longModeEnabled" class="modeButton" fill="outline" shape="round" color="dark" (click)="changeMode('focus')">
+        <img src="../../assets/icon/coffee.svg" alt="Coffee"> Long Break
+      </ion-button>
+      <ion-button *ngIf="focusModeEnabled" class="modeButton" fill="outline" shape="round" color="dark" (click)="changeMode('short')">
+        <img src="../../assets/icon/brain.svg" alt="brain">Focus
+      </ion-button>
+    </ion-buttons>
+    <div class="clock"><span #timer></span></div>
     <div class="containerButtons">
       <ion-button color="darkBlue">
         <img src="../../assets/icon/sharp/white.svg" alt="sharps" />
