@@ -8,7 +8,7 @@
     font-size: 256px;
     width: 295px;
     span {
-      color: #cee8ff;
+      color: var(--ion-color-dark);
       word-break: break-all;
       text-align: center;
     }
@@ -19,6 +19,7 @@
     font-size: 16px;
     height: 48px;
     width: 190px;
+    border-color:blue;
     img{
       padding-right: 10px;
     }

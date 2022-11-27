@@ -1,28 +1,30 @@
 <ion-content [fullscreen]="true">
   <div id="container">
+    <ion-toggle (ionChange)="onToggleColorTheme($event)"></ion-toggle>
     <ion-buttons>
       <ion-button *ngIf="shortModeEnabled" class="modeButton" fill="outline" shape="round" color="dark" (click)="changeMode('long')">
-        <img src="../../assets/icon/coffee.svg" alt="Coffee"> Short Break
+         Short Break
       </ion-button>
       <ion-button  *ngIf="longModeEnabled" class="modeButton" fill="outline" shape="round" color="dark" (click)="changeMode('focus')">
-        <img src="../../assets/icon/coffee.svg" alt="Coffee"> Long Break
+         Long Break
       </ion-button>
       <ion-button *ngIf="focusModeEnabled" class="modeButton" fill="outline" shape="round" color="dark" (click)="changeMode('short')">
-        <img src="../../assets/icon/brain.svg" alt="brain">Focus
+        Focus
       </ion-button>
     </ion-buttons>
-    <div class="clock"><span #timer></span></div>
+    <ion-text class="clock"><span class="foo" #timer></span></ion-text>
     <div class="containerButtons">
       <ion-button color="darkBlue">
-        <img src="../../assets/icon/sharp/white.svg" alt="sharps" />
+        <img *ngIf="!lightMode" src="../../assets/icon/sharp/white.svg" alt="sharps" />
         <img
           *ngIf="lightMode"
           src="../../assets/icon/sharp/blue.svg"
           alt="sharps"
         />
       </ion-button>
-      <ion-button color="blue" class="playButton">
+      <ion-button color="blue" class="playButton" (click)="startTimer()">
         <img
+        *ngIf="!lightMode"
           class="logoPlay"
           src="../../assets/icon/playIcon/white.svg"
           alt="play"
@@ -35,7 +37,7 @@
         />
       </ion-button>
       <ion-button color="darkBlue">
-        <img src="../../assets/icon/fastForward/white.svg" alt="fastForward" />
+        <img *ngIf="!lightMode" src="../../assets/icon/fastForward/white.svg" alt="fastForward" />
         <img
           *ngIf="lightMode"
           src="../../assets/icon/fastForward/blue.svg"

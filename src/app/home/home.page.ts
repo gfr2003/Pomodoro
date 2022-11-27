@@ -1,12 +1,14 @@
+/* eslint-disable prefer-arrow/prefer-arrow-functions */
+/* eslint-disable space-before-function-paren */
 /* eslint-disable curly */
 import {
   AfterViewInit,
   Component,
   ElementRef,
-  OnInit,
   Renderer2,
   ViewChild,
 } from '@angular/core';
+import { ToggleCustomEvent } from '@ionic/angular';
 
 @Component({
   selector: 'app-home',
@@ -19,6 +21,7 @@ export class HomePage implements AfterViewInit {
   longModeEnabled = false;
   focusModeEnabled = false;
   timerValue: string;
+  lightMode = true;
   constructor(private renderer: Renderer2) {}
   ngAfterViewInit(): void {
     this.fillInitTimer();
@@ -73,7 +76,105 @@ export class HomePage implements AfterViewInit {
     const text = this.renderer.createText('0500');
     this.renderer.appendChild(this.timer.nativeElement, text);
   }
-  // startTimer() {
-  //   thistimer
-  // }
+
+  onToggleColorTheme(event: ToggleCustomEvent) {
+    const toogleActivated = event.detail.checked;
+    if (toogleActivated) {
+      this.renderer.setAttribute(document.body, 'color-theme', 'dark');
+      this.lightMode = false;
+    }
+    if (!toogleActivated) {
+      this.renderer.setAttribute(document.body, 'color-theme', 'light');
+      this.lightMode = true;
+    }
+  }
+  timers(start) {
+    // get the number of seconds that have elapsed since
+    // startTimer() was called
+    const prepareMinutes =
+      this.timer.nativeElement.innerText.substring(1, 2) * 60;
+    console.log(Date.now());
+    var diff, minutes, seconds;
+
+    diff = prepareMinutes - (((Date.now() - start) / 1000) | 0);
+
+    // does the same job as parseInt truncates the float
+    minutes = (diff / 60) | 0;
+    seconds = diff % 60 | 0;
+
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+    seconds = seconds < 10 ? '0' + seconds : seconds;
+
+    const action = this.renderer.createText(minutes + seconds);
+    this.renderer.setProperty(
+      this.timer.nativeElement,
+      'innerText',
+      action.data
+    );
+
+    if (diff <= 0) {
+      // add one second so that the count down starts at the full duration
+      // example 05:00 not 04:59
+      start = Date.now() + 1000;
+    }
+    console.log(this.timer.nativeElement.innerText);
+  }
+  startTimer() {
+    const start = Date.now();
+    // we don't want to wait a full second before the timer starts
+    this.timers(start);
+    setInterval(() => {
+      this.timers(start);
+    }, 1000);
+  }
+   CountDownTimer(duration, granularity) {
+    this.duration = duration;
+    this.granularity = granularity || 1000;
+    this.tickFtns = [];
+    this.running = false;
+  }
+  
+  CountDownTimer.prototype.start = () {
+    if (this.running) {
+      return;
+    }
+    this.running = true;
+    var start = Date.now(),
+        that = this,
+        diff, obj;
+  
+    (function timer() {
+      diff = that.duration - (((Date.now() - start) / 1000) | 0);
+  
+      if (diff > 0) {
+        setTimeout(timer, that.granularity);
+      } else {
+        diff = 0;
+        that.running = false;
+      }
+  
+      obj = CountDownTimer.parse(diff);
+      that.tickFtns.forEach(function(ftn) {
+        ftn.call(this, obj.minutes, obj.seconds);
+      }, that);
+    }());
+  };
+  
+  CountDownTimer.prototype.onTick = function(ftn) {
+    if (typeof ftn === 'function') {
+      this.tickFtns.push(ftn);
+    }
+    return this;
+  };
+  
+  CountDownTimer.prototype.expired = function() {
+    return !this.running;
+  };
+  
+  CountDownTimer.parse = function(seconds) {
+    return {
+      'minutes': (seconds / 60) | 0,
+      'seconds': (seconds % 60) | 0
+    };
+  };
 }
