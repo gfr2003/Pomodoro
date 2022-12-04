@@ -14,13 +14,13 @@
     }
   }
   .modeButton {
-    float:left;
+    float: left;
     font-weight: 500;
     font-size: 16px;
     height: 48px;
     width: 190px;
-    border-color:blue;
-    img{
+    border-color: blue;
+    img {
       padding-right: 10px;
     }
   }
@@ -38,6 +38,12 @@
     .playButton {
       width: 122px;
       height: 96px;
+    }
+  }
+  .toolsContainer {
+    @media only screen and (max-width: 1024px) {
+      display: flex;
+      flex-direction: column;
     }
   }
 }

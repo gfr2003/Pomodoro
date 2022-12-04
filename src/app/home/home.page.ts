@@ -1,6 +1,3 @@
-/* eslint-disable prefer-arrow/prefer-arrow-functions */
-/* eslint-disable space-before-function-paren */
-/* eslint-disable curly */
 import {
   AfterViewInit,
   Component,
@@ -17,67 +14,34 @@ import { ToggleCustomEvent } from '@ionic/angular';
 })
 export class HomePage implements AfterViewInit {
   @ViewChild('timer', { static: false }) timer: ElementRef;
-  shortModeEnabled = true;
-  longModeEnabled = false;
-  focusModeEnabled = false;
+  shortMode = true;
+  longMode = false;
+  focusMode = false;
   timerValue: string;
   lightMode = true;
+  clockProcess: any;
   constructor(private renderer: Renderer2) {}
   ngAfterViewInit(): void {
     this.fillInitTimer();
   }
-  changeMode(mode: string) {
-    this.shortModeEnabled = false;
-    this.longModeEnabled = false;
-    this.focusModeEnabled = false;
+
+  public changeMode(mode: string) {
+    this.shortMode = false;
+    this.longMode = false;
+    this.focusMode = false;
     if (mode === 'short') {
-      this.longModeEnabled = true;
+      this.longMode = true;
     }
     if (mode === 'long') {
-      this.focusModeEnabled = true;
+      this.focusMode = true;
     }
     if (mode === 'focus') {
-      this.shortModeEnabled = true;
+      this.shortMode = true;
     }
     this.setTimerAccordingMode();
   }
 
-  setTimerAccordingMode() {
-    if (this.shortModeEnabled) {
-      const text = this.renderer.createText('0500');
-      this.renderer.setProperty(
-        this.timer.nativeElement,
-        'innerText',
-        text.data
-      );
-      return (this.timerValue = '0500');
-    }
-    if (this.longModeEnabled) {
-      const text = this.renderer.createText('1500');
-      this.renderer.setProperty(
-        this.timer.nativeElement,
-        'innerText',
-        text.data
-      );
-      return (this.timerValue = '1500');
-    }
-    if (this.focusModeEnabled) {
-      const text = this.renderer.createText('2500');
-      this.renderer.setProperty(
-        this.timer.nativeElement,
-        'innerText',
-        text.data
-      );
-      return (this.timerValue = '2500');
-    }
-  }
-
-  fillInitTimer() {
-    const text = this.renderer.createText('0500');
-    this.renderer.appendChild(this.timer.nativeElement, text);
-  }
-
-  onToggleColorTheme(event: ToggleCustomEvent) {
+  public onToggleColorTheme(event: ToggleCustomEvent) {
     const toogleActivated = event.detail.checked;
     if (toogleActivated) {
       this.renderer.setAttribute(document.body, 'color-theme', 'dark');
@@ -88,93 +52,92 @@ export class HomePage implements AfterViewInit {
       this.lightMode = true;
     }
   }
-  timers(start) {
-    // get the number of seconds that have elapsed since
-    // startTimer() was called
-    const prepareMinutes =
-      this.timer.nativeElement.innerText.substring(1, 2) * 60;
-    console.log(Date.now());
-    var diff, minutes, seconds;
 
-    diff = prepareMinutes - (((Date.now() - start) / 1000) | 0);
+  public fillInitTimer() {
+    const text = this.renderer.createText('0500');
+    this.renderer.appendChild(this.timer.nativeElement, text);
+  }
 
-    // does the same job as parseInt truncates the float
-    minutes = (diff / 60) | 0;
-    seconds = diff % 60 | 0;
+  public startTimer() {
+    const runningTimer = () => {
+      const currentTimer = this.timer.nativeElement.innerHTML;
+      const currentMinutes: string = currentTimer.substring(0, 2);
+      const currentSeconds: string = currentTimer.substring(2, 4);
+      if (currentMinutes === '00' && currentSeconds === '00') {
+        this.stopWhenTimeIsOver(this.clockProcess);
+      }
+      const { minutes, seconds } = this.treatmentLeadingNumbers(
+        currentMinutes,
+        currentSeconds
+      );
+      const clock = `${minutes}${seconds}`;
+      this.renderClock(clock);
+    };
+    this.clockProcess = setInterval(runningTimer, 1000);
+  }
 
-    minutes = minutes < 10 ? '0' + minutes : minutes;
-    seconds = seconds < 10 ? '0' + seconds : seconds;
+  public stopClock() {
+    clearInterval(this.clockProcess);
+    this.setTimerAccordingMode();
+    this.registryHistoryWhenStopped();
+  }
 
-    const action = this.renderer.createText(minutes + seconds);
-    this.renderer.setProperty(
-      this.timer.nativeElement,
-      'innerText',
-      action.data
+  private stopWhenTimeIsOver(timeoutProcess: any) {
+    this.beep();
+    clearInterval(timeoutProcess);
+  }
+
+  private setTimerAccordingMode() {
+    const modeSelected = [
+      this.shortMode,
+      this.longMode,
+      this.focusMode,
+    ].indexOf(true);
+    const timeMode = ['0500', '1500', '2500'];
+    this.renderClock(timeMode[modeSelected]);
+  }
+
+  private treatmentLeadingNumbers(
+    currentMinutes: string,
+    currentSeconds: string
+  ) {
+    let minutes = (
+      currentSeconds === '00'
+        ? Number(currentMinutes) - 1
+        : Number(currentMinutes)
+    ).toString();
+    let seconds = (
+      currentSeconds !== '00'
+        ? Number(currentSeconds) - 1
+        : Number(currentSeconds) + 59
+    ).toString();
+    if (minutes.length < 2) {
+      minutes = minutes.toString().padStart(2, '0');
+    }
+    if (seconds.length < 2) {
+      seconds = seconds.toString().padStart(2, '0');
+    }
+    return { minutes, seconds };
+  }
+
+  private renderClock(clock: string) {
+    const time = this.renderer.createText(clock);
+    this.renderer.setProperty(this.timer.nativeElement, 'innerText', time.data);
+  }
+
+  private beep() {
+    const sound = new Audio(
+      'http://freesoundeffect.net/sites/default/files/dong-2-sound-effect-39724732.mp3'
     );
 
-    if (diff <= 0) {
-      // add one second so that the count down starts at the full duration
-      // example 05:00 not 04:59
-      start = Date.now() + 1000;
-    }
-    console.log(this.timer.nativeElement.innerText);
+    sound.play();
   }
-  startTimer() {
-    const start = Date.now();
-    // we don't want to wait a full second before the timer starts
-    this.timers(start);
-    setInterval(() => {
-      this.timers(start);
-    }, 1000);
-  }
-   CountDownTimer(duration, granularity) {
-    this.duration = duration;
-    this.granularity = granularity || 1000;
-    this.tickFtns = [];
-    this.running = false;
-  }
-  
-  CountDownTimer.prototype.start = () {
-    if (this.running) {
-      return;
-    }
-    this.running = true;
-    var start = Date.now(),
-        that = this,
-        diff, obj;
-  
-    (function timer() {
-      diff = that.duration - (((Date.now() - start) / 1000) | 0);
-  
-      if (diff > 0) {
-        setTimeout(timer, that.granularity);
-      } else {
-        diff = 0;
-        that.running = false;
-      }
-  
-      obj = CountDownTimer.parse(diff);
-      that.tickFtns.forEach(function(ftn) {
-        ftn.call(this, obj.minutes, obj.seconds);
-      }, that);
-    }());
-  };
-  
-  CountDownTimer.prototype.onTick = function(ftn) {
-    if (typeof ftn === 'function') {
-      this.tickFtns.push(ftn);
-    }
-    return this;
-  };
-  
-  CountDownTimer.prototype.expired = function() {
-    return !this.running;
-  };
-  
-  CountDownTimer.parse = function(seconds) {
-    return {
-      'minutes': (seconds / 60) | 0,
-      'seconds': (seconds % 60) | 0
+
+  private registryHistoryWhenStopped() {
+    const stoppedActionHistory = {
+      action: 'Quebra de ciclo',
+      date: new Date(),
     };
-  };
+    localStorage.setItem('action', JSON.stringify(stoppedActionHistory));
+  }
 }
