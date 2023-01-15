@@ -5,7 +5,7 @@ import {
   Renderer2,
   ViewChild,
 } from '@angular/core';
-import { ToggleCustomEvent } from '@ionic/angular';
+import { MenuController, ToggleCustomEvent } from '@ionic/angular';
 
 @Component({
   selector: 'app-home',
@@ -15,17 +15,19 @@ import { ToggleCustomEvent } from '@ionic/angular';
 export class HomePage implements AfterViewInit {
   @ViewChild('timer', { static: false }) timer: ElementRef;
   shortMode = true;
+  history: any;
   longMode = false;
   focusMode = false;
   timerValue: string;
-  lightMode = true;
+  lightMode =
+    document.body.getAttribute('color-theme') === 'light' ? true : false;
   clockProcess: any;
-  constructor(private renderer: Renderer2) {}
+  constructor(private renderer?: Renderer2, private menu?: MenuController) {}
   ngAfterViewInit(): void {
     this.fillInitTimer();
   }
 
-  public changeMode(mode: string) {
+  public changeTimerMode(mode: string) {
     this.shortMode = false;
     this.longMode = false;
     this.focusMode = false;
@@ -39,18 +41,6 @@ export class HomePage implements AfterViewInit {
       this.shortMode = true;
     }
     this.setTimerAccordingMode();
-  }
-
-  public onToggleColorTheme(event: ToggleCustomEvent) {
-    const toogleActivated = event.detail.checked;
-    if (toogleActivated) {
-      this.renderer.setAttribute(document.body, 'color-theme', 'dark');
-      this.lightMode = false;
-    }
-    if (!toogleActivated) {
-      this.renderer.setAttribute(document.body, 'color-theme', 'light');
-      this.lightMode = true;
-    }
   }
 
   public fillInitTimer() {
@@ -82,6 +72,10 @@ export class HomePage implements AfterViewInit {
     this.registryHistoryWhenStopped();
   }
 
+  public showHistory() {
+    this.menu.open('menuHistory');
+    this.menu.enable(true);
+  }
   private stopWhenTimeIsOver(timeoutProcess: any) {
     this.beep();
     clearInterval(timeoutProcess);

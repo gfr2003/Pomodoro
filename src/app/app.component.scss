@@ -1,0 +1,37 @@
+.menuIcon {
+  cursor: pointer;
+  font-size: 30px;
+  --color: --ion-color-dark;
+}
+
+h2 {
+  padding-left: 10px;
+  --color: --ion-color-darkBlue;
+  font-size: 30px;
+}
+.container {
+  --display: flex;
+  --flex-direction: column;
+  --justify-content: space-between;
+}
+.historyContainer {
+  --background: var(--ion-color-blue);
+  color: #fff;
+  margin: 10px;
+  border-color: #fff;
+  border-style: none;
+  border-width: 2px;
+  box-shadow: 0px 4px 5px #8888;
+
+  border-radius: 20px;
+  ion-label {
+    font-weight: bold;
+  }
+}
+ion-menu::part(backdrop) {
+  background-color: transparent;
+}
+ion-title {
+  display: flex;
+  text-align: center;
+}
