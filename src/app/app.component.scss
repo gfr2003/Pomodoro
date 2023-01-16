@@ -31,7 +31,12 @@ h2 {
 ion-menu::part(backdrop) {
   background-color: transparent;
 }
-ion-title {
+// ion-title {
+//   display: flex;
+//   text-align: center;
+// }
+ion-footer{
   display: flex;
-  text-align: center;
+  justify-content: center;
+  align-items: center;
 }

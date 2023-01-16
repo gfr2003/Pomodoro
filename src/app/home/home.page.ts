@@ -16,6 +16,7 @@ export class HomePage implements AfterViewInit {
   @ViewChild('timer', { static: false }) timer: ElementRef;
   shortMode = true;
   history: any;
+  isClocking = false;
   longMode = false;
   focusMode = false;
   timerValue: string;
@@ -49,6 +50,7 @@ export class HomePage implements AfterViewInit {
   }
 
   public startTimer() {
+    this.isClocking = true
     const runningTimer = () => {
       const currentTimer = this.timer.nativeElement.innerHTML;
       const currentMinutes: string = currentTimer.substring(0, 2);
@@ -67,6 +69,7 @@ export class HomePage implements AfterViewInit {
   }
 
   public stopClock() {
+    this.isClocking = false
     clearInterval(this.clockProcess);
     this.setTimerAccordingMode();
     this.registryHistoryWhenStopped();
@@ -77,6 +80,7 @@ export class HomePage implements AfterViewInit {
     this.menu.enable(true);
   }
   private stopWhenTimeIsOver(timeoutProcess: any) {
+    this.isClocking = false
     this.beep();
     clearInterval(timeoutProcess);
   }
