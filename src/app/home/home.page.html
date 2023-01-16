@@ -1,6 +1,6 @@
 <ion-content [fullscreen]="true">
   <div id="container">
-    <ion-toggle (ionChange)="onToggleColorTheme($event)"></ion-toggle>
+    
     <ion-buttons>
       <ion-button
         *ngIf="shortMode"
@@ -8,7 +8,7 @@
         fill="outline"
         shape="round"
         color="dark"
-        (click)="changeMode('long')"
+        (click)="changeTimerMode('long')"
       >
         Short Break
       </ion-button>
@@ -18,7 +18,7 @@
         fill="outline"
         shape="round"
         color="dark"
-        (click)="changeMode('focus')"
+        (click)="changeTimerMode('focus')"
       >
         Long Break
       </ion-button>
@@ -28,52 +28,22 @@
         fill="outline"
         shape="round"
         color="dark"
-        (click)="changeMode('short')"
+        (click)="changeTimerMode('short')"
       >
         Focus
       </ion-button>
     </ion-buttons>
     <ion-text class="clock"><span class="foo" #timer></span></ion-text>
     <div class="containerButtons">
-      <ion-button color="darkBlue">
-        <img
-          *ngIf="!lightMode"
-          src="../../assets/icon/sharp/white.svg"
-          alt="sharps"
-        />
-        <img
-          *ngIf="lightMode"
-          src="../../assets/icon/sharp/blue.svg"
-          alt="sharps"
-        />
+      <ion-button color="darkBlue" (click)="showHistory()">
+        <ion-icon alt="settings" name="ellipsis-horizontal" color="dark"></ion-icon>
       </ion-button>
-      <ion-button color="blue" class="playButton" (click)="startTimer()">
-        <img
-          *ngIf="!lightMode"
-          class="logoPlay"
-          src="../../assets/icon/playIcon/white.svg"
-          alt="play"
-        />
-        <img
-          *ngIf="lightMode"
-          class="logoPlay"
-          src="../../assets/icon/playIcon/blue.svg"
-          alt="play"
-        />
+      <ion-button color="blue" class="playButton" [disabled]="isClocking" (click)="startTimer()">
+        <ion-icon alt="play" name="play" color="dark"></ion-icon>
       </ion-button>
       <ion-button color="darkBlue" (click)="stopClock()">
-        <img
-          *ngIf="!lightMode"
-          src="../../assets/icon/fastForward/white.svg"
-          alt="fastForward"
-        />
-        <img
-          *ngIf="lightMode"
-          src="../../assets/icon/fastForward/blue.svg"
-          alt="fastForward"
-        />
+        <ion-icon name="play-skip-forward" color="dark" alt="skip timer"></ion-icon>
       </ion-button>
     </div>
-    <div class="toolsContainer"><ion-button color="dark" fill="outline"> Kanban Board</ion-button><ion-button color="dark" fill="outline"> Kanban Board</ion-button><ion-button color="dark" fill="outline"> Kanban Board</ion-button></div>
   </div>
 </ion-content>
