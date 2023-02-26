@@ -7,6 +7,6 @@ App to enjoy the pomodoro technique, options:  Focus, Short Break and Long Break
 Ionic start
 
 
-#Link project
+# Link project
 
 https://pomodoro-c199a.web.app/home
