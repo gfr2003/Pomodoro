@@ -50,12 +50,12 @@ export class HomePage implements AfterViewInit {
   }
 
   public startTimer() {
-    this.isClocking = true
+    this.isClocking = true;
     const runningTimer = () => {
       const currentTimer = this.timer.nativeElement.innerHTML;
       const currentMinutes: string = currentTimer.substring(0, 2);
       const currentSeconds: string = currentTimer.substring(2, 4);
-      if (currentMinutes === '00' && currentSeconds === '00') {
+      if (currentMinutes === '00' && currentSeconds === '01') {
         this.stopWhenTimeIsOver(this.clockProcess);
       }
       const { minutes, seconds } = this.treatmentLeadingNumbers(
@@ -69,7 +69,7 @@ export class HomePage implements AfterViewInit {
   }
 
   public stopClock() {
-    this.isClocking = false
+    this.isClocking = false;
     clearInterval(this.clockProcess);
     this.setTimerAccordingMode();
     this.registryHistoryWhenStopped();
@@ -80,7 +80,7 @@ export class HomePage implements AfterViewInit {
     this.menu.enable(true);
   }
   private stopWhenTimeIsOver(timeoutProcess: any) {
-    this.isClocking = false
+    this.isClocking = false;
     this.beep();
     clearInterval(timeoutProcess);
   }
@@ -125,7 +125,7 @@ export class HomePage implements AfterViewInit {
 
   private beep() {
     const sound = new Audio(
-      'http://freesoundeffect.net/sites/default/files/dong-2-sound-effect-39724732.mp3'
+      'assets/clock.mp3'
     );
 
     sound.play();
