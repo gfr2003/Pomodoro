@@ -10,7 +10,7 @@ import { isoHours, isoToBrDate } from './utils/date.util';
 })
 export class AppComponent implements OnInit {
   public history;
-  constructor(private menu: MenuController, public renderer: Renderer2) {}
+  constructor(public menu: MenuController, public renderer: Renderer2) {}
   ngOnInit(): void {
     this.onToggleColorTheme();
   }
@@ -29,7 +29,7 @@ export class AppComponent implements OnInit {
       { data: historyData, message: historyMessage, hours: formatHour },
     ];
   }
-  public onToggleColorTheme(event?: ToggleCustomEvent) {
+  public onToggleColorTheme(event?) {
     if (!event) {
       return this.renderer.setAttribute(document.body, 'color-theme', 'light');
     }
